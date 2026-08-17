@@ -6,7 +6,9 @@ readme = "README.md"
 requires-python = ">=3.12,<3.14"
 dependencies = [
     "cs336-basics",
+    "einops>=0.8",
     "humanfriendly",
+    "jaxtyping>=0.3",
     "matplotlib",
     "numpy",
     "pytest>=8",
@@ -31,8 +33,18 @@ module-root = ""
 package = true
 python-preference = "managed"
 
+# Windows/Linux: CUDA wheels from PyTorch index (PyPI Windows torch is CPU-only).
+# macOS: fall back to PyPI (no CUDA builds).
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
 [tool.uv.sources]
 cs336-basics = { path = "../assignment1-basics", editable = true } # Change this path if you want a different A1 implementation.
+torch = [
+  { index = "pytorch-cu130", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
 
 
 
